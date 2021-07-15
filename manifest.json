@@ -1,0 +1,20 @@
+{
+
+  "manifest_version": 2,
+  "name": "SearchbarShortcut",
+  "version": "1.0",
+
+  "description": "Press Ctrl + Space to open your page's search bar.",
+
+  "icons": {
+    "48": "icons/magnifier.png"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": ["payload.js"]
+    }
+  ]
+
+}
