@@ -12,7 +12,8 @@ class WebsiteShortcuts {
         this.searchbars_setup();
         // this.
 
-        this.add_event_listener();
+        this.kb_shortcut_listener();
+        // this.refresh_searchbars_listener_on_click();
     }
 
     searchbars_setup() {
@@ -26,11 +27,6 @@ class WebsiteShortcuts {
         this.all_input_fields = [...this.search_fields, ...this.text_fields];
 
         // border green all input fields
-        if (this.highlight) {
-            this.all_input_fields.forEach((input_field) => {
-                input_field.style.border = "1px solid green";
-            });
-        }
 
         // sort out the search bars that are not usable by the user
         // var criterias = [ function height_is_below_0(element) {
@@ -56,7 +52,7 @@ class WebsiteShortcuts {
         //     return this.style.display === "none";
         // },
 
-        // ];
+        // ]; 
 
         // this.filtered_input_fields = this.all_input_fields;
         // for (var j = 0; j < criterias.length; j++) {
@@ -70,40 +66,66 @@ class WebsiteShortcuts {
                 && !element.disabled 
                 && !element.readOnly 
                 && element.style.visibility !== "hidden" 
-                && element.style.display !== "none";
+                && element.style.display !== "none"; // breaks office.com
         });
 
-
-        for (let i = 0; i < this.filtered_input_fields.length; i++) {
-            if (i == 0) this.filtered_input_fields[i].style.border = "1px solid red";
-            else this.text_fields[i].style.border = "1px solid green";
+        if (this.highlight) {
+            for (let i = 0; i < this.filtered_input_fields.length; i++) {
+                if (i == 0) this.filtered_input_fields[i].style.border = "1px solid rgba(255, 0, 0, 0.2)";
+                else this.text_fields[i].style.border = "1px solid green";
+            }
         }
 
-        if (this.debug) console.log("all : " + this.all_input_fields);
-        if (this.debug) console.debug("filtered : " + this.filtered_input_fields);
+        if (this.debug) console.log(this.all_input_fields);
+        if (this.debug) console.debug(this.filtered_input_fields);
         // inputs.push(document.querySelectorAll('input[type=text][name=search]'))
-
     }
 
-    add_event_listener() {
+    kb_shortcut_listener() {
         // save object reference
         var self = this;
         function eventHandler(event) {
 
             // searchbars feature
-            if (event.ctrlKey && event.key === ' ') {
-                if (self.filtered_input_fields.length > 0) {
-                    self.filtered_input_fields[0].focus();
-                    self.filtered_input_fields[0].select();
+            if (event.ctrlKey) {
+                if (event.key === ' ') {
+                    if (self.filtered_input_fields.length > 0) {
+                       self.filtered_input_fields[0].focus();
+                        self.filtered_input_fields[0].select(); // select all text in searchbar 
+                    }
+
+                }
+                else {
+                    self.searchbars_setup();
                 }
             }
         }
 
         document.addEventListener('keydown', eventHandler);
     }
+
+    refresh_searchbars_listener_on_click() {
+        // on click, refresh the search bars
+        var self = this;
+        document.addEventListener('click', function () {
+            self.searchbars_setup();
+            console.log("refreshed");
+        }
+        );
+    }
 }
 // if (this.debug) console.debug("searchbars class loaded");
 var website_shortcuts = new WebsiteShortcuts(debug, highlight, feature_searchbars);
 // if (this.debug) console.debug("searchbars : ", website_shortcuts);
-website_shortcuts.add_event_listener();
-// if (this.debug) console.debug("key listener added");
+
+function test() {
+    console.log("test");
+}
+
+// trigger test at the very end of the page loading
+document.addEventListener('DOMContentLoaded', function () {
+    test();
+}
+);
+
+
