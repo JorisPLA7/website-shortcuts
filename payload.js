@@ -1,64 +1,109 @@
 var debug = true;
 var highlight = true;
-
+var feature_searchbars = true;
 //select seqarch bars and open them on the associated keyboar shortcut.
-class Searchbars {
-    constructor(debug, highlight) {
+class WebsiteShortcuts {
+    constructor(debug = false, highlight = false, feature_searchbars = true) {
         this.debug = debug;
         this.highlight = highlight;
-        this.focused_id = 0
+        this.feature_searchbars = feature_searchbars;
 
-        //populate all_input_fields with relevant input fields
+        //setup each feature
+        this.searchbars_setup();
+        // this.
+
+        this.add_event_listener();
+    }
+
+    searchbars_setup() {
+        this.focused_id = 0;
+
+
+        //populate all_input_fields with potentially usable search bars
+
         this.search_fields = document.querySelectorAll('input[type=search]')
         this.text_fields = document.querySelectorAll("input[type=text]");
         this.all_input_fields = [...this.search_fields, ...this.text_fields];
 
-        if (this.debug == true) {
-            console.log("all_input_fileds : + ", this.all_input_fields);
+        // border green all input fields
+        if (this.highlight) {
+            this.all_input_fields.forEach((input_field) => {
+                input_field.style.border = "1px solid green";
+            });
         }
 
-        //highlight input fields in color depending on type & rank
-        for (let i = 0; i < this.search_fields.length; i++) {
-            this.search_fields[i].style.border = "1px solid blue";
-        }
-        for (let i = 0; i < this.text_fields.length; i++) {
-            this.text_fields[i].style.border = "1px solid green";
+        // sort out the search bars that are not usable by the user
+        // var criterias = [ function height_is_below_0(element) {
+        //     return element.getBoundingClientRect().height < 0;
+        // },
+        // function width_is_below_0() {
+        //     return this.getBoundingClientRect().width < 0;
+        // },
+
+        // function is_hidden() {
+        //     return this.offsetParent === null;
+        // },
+        // function is_disabled() {
+        //     return this.disabled;
+        // },
+        // function is_readonly() {
+        //     return this.readOnly;
+        // },
+        // function is_not_visible() {
+        //     return this.style.visibility === "hidden";
+        // },
+        // function is_not_displayed() {
+        //     return this.style.display === "none";
+        // },
+
+        // ];
+
+        // this.filtered_input_fields = this.all_input_fields;
+        // for (var j = 0; j < criterias.length; j++) {
+        //     this.filtered_input_fields = this.filtered_input_fields.filter(criterias[j]);
+        // }
+
+        this.filtered_input_fields = this.all_input_fields.filter((element) => {
+            return element.getBoundingClientRect().height > 0
+                && element.getBoundingClientRect().width > 0
+                && element.offsetParent !== null
+                && !element.disabled 
+                && !element.readOnly 
+                && element.style.visibility !== "hidden" 
+                && element.style.display !== "none";
+        });
+
+
+        for (let i = 0; i < this.filtered_input_fields.length; i++) {
+            if (i == 0) this.filtered_input_fields[i].style.border = "1px solid red";
+            else this.text_fields[i].style.border = "1px solid green";
         }
 
-        console.log(this.all_input_fields);
+        if (this.debug) console.log("all : " + this.all_input_fields);
+        if (this.debug) console.debug("filtered : " + this.filtered_input_fields);
         // inputs.push(document.querySelectorAll('input[type=text][name=search]'))
 
-        if (this.all_input_fields.length >= 1) {
-            this.all_input_fields[0].style.border = "1px solid red";
-        }
-    }
-
-    focus_search() {
-        this.all_input_fields[0].focus()
-        // inputs[focused_id].focus()
-        // console.log("focus_search " + focused_id)
-        // focused_id++
     }
 
     add_event_listener() {
         // save object reference
         var self = this;
         function eventHandler(event) {
-            // get attributes of the calling 
-            // console.log("Event : keydown");
+
+            // searchbars feature
             if (event.ctrlKey && event.key === ' ') {
-                self.debug = self.highlight;
-                console.log("lenght : " + self.all_input_fields.length);
-                self.all_input_fields[0].focus();
-                console.log("Event : CTRL + SPACE");
+                if (self.filtered_input_fields.length > 0) {
+                    self.filtered_input_fields[0].focus();
+                    self.filtered_input_fields[0].select();
+                }
             }
         }
 
-        document.addEventListener('keydown', eventHandler); 
+        document.addEventListener('keydown', eventHandler);
     }
 }
-console.log("searchbars class loaded");
-var searchbars = new Searchbars(debug, highlight);
-console.log("searchbars : ", searchbars);
-searchbars.add_event_listener();
-console.log("key listener added");
+// if (this.debug) console.debug("searchbars class loaded");
+var website_shortcuts = new WebsiteShortcuts(debug, highlight, feature_searchbars);
+// if (this.debug) console.debug("searchbars : ", website_shortcuts);
+website_shortcuts.add_event_listener();
+// if (this.debug) console.debug("key listener added");
