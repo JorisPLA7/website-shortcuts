@@ -1,63 +1,31 @@
-var debug = true;
-var highlight = true;
-var feature_searchbars = true;
+
+const debug = true;
+const highlight = true;
+const feature_searchbars = true;
+
 //select seqarch bars and open them on the associated keyboar shortcut.
 class WebsiteShortcuts {
-    constructor(debug = false, highlight = false, feature_searchbars = true) {
+    constructor(debug = true, highlight_on_page_load = true, feature_searchbars = true) {
         this.debug = debug;
-        this.highlight = highlight;
+        this.highlight = highlight_on_page_load;
         this.feature_searchbars = feature_searchbars;
 
-        //setup each feature
-        this.searchbars_setup();
-        // this.
+        this.refreshLoop();
 
-        this.kb_shortcut_listener();
+        this.kbShortcutListener();
         // this.refresh_searchbars_listener_on_click();
     }
 
-    searchbars_setup() {
+    refreshLoop() {
+        this.searchbarsRefresh();
+        setTimeout(this.refreshLoop.bind(this), 1000);
+    }
+
+    searchbarsRefresh() {
         this.focused_id = 0;
-
-
-        //populate all_input_fields with potentially usable search bars
-
         this.search_fields = document.querySelectorAll('input[type=search]')
         this.text_fields = document.querySelectorAll("input[type=text]");
         this.all_input_fields = [...this.search_fields, ...this.text_fields];
-
-        // border green all input fields
-
-        // sort out the search bars that are not usable by the user
-        // var criterias = [ function height_is_below_0(element) {
-        //     return element.getBoundingClientRect().height < 0;
-        // },
-        // function width_is_below_0() {
-        //     return this.getBoundingClientRect().width < 0;
-        // },
-
-        // function is_hidden() {
-        //     return this.offsetParent === null;
-        // },
-        // function is_disabled() {
-        //     return this.disabled;
-        // },
-        // function is_readonly() {
-        //     return this.readOnly;
-        // },
-        // function is_not_visible() {
-        //     return this.style.visibility === "hidden";
-        // },
-        // function is_not_displayed() {
-        //     return this.style.display === "none";
-        // },
-
-        // ]; 
-
-        // this.filtered_input_fields = this.all_input_fields;
-        // for (var j = 0; j < criterias.length; j++) {
-        //     this.filtered_input_fields = this.filtered_input_fields.filter(criterias[j]);
-        // }
 
         this.filtered_input_fields = this.all_input_fields.filter((element) => {
             return element.getBoundingClientRect().height > 0
@@ -81,7 +49,7 @@ class WebsiteShortcuts {
         // inputs.push(document.querySelectorAll('input[type=text][name=search]'))
     }
 
-    kb_shortcut_listener() {
+    kbShortcutListener() {
         // save object reference
         var self = this;
         function eventHandler(event) {
@@ -96,36 +64,22 @@ class WebsiteShortcuts {
 
                 }
                 else {
-                    self.searchbars_setup();
+                    self.searchbarsRefresh();
                 }
             }
         }
 
-        document.addEventListener('keydown', eventHandler);
+            document.addEventListener('keydown', eventHandler);
     }
 
     refresh_searchbars_listener_on_click() {
         // on click, refresh the search bars
         var self = this;
         document.addEventListener('click', function () {
-            self.searchbars_setup();
+            self.searchbarsRefresh();
             console.log("refreshed");
         }
         );
     }
 }
-// if (this.debug) console.debug("searchbars class loaded");
 var website_shortcuts = new WebsiteShortcuts(debug, highlight, feature_searchbars);
-// if (this.debug) console.debug("searchbars : ", website_shortcuts);
-
-function test() {
-    console.log("test");
-}
-
-// trigger test at the very end of the page loading
-document.addEventListener('DOMContentLoaded', function () {
-    test();
-}
-);
-
-
