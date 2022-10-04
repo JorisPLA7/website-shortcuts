@@ -1,10 +1,10 @@
 {
 
   "manifest_version": 2,
-  "name": "SearchbarShortcut",
-  "version": "1.0",
+  "name": "Website Shortcuts",
+  "version": "1.2",
 
-  "description": "Press Ctrl + Space to open your page's search bar.",
+"description": "Ctrl + Space to search. \nPress Ctrl + H to move to home page",
 
   "icons": {
     "48": "icons/magnifier.png"

@@ -2,13 +2,16 @@
 const debug = true;
 const highlight = true;
 const feature_searchbars = true;
+const feature_homepage = true;
 
 //select seqarch bars and open them on the associated keyboar shortcut.
 class WebsiteShortcuts {
-    constructor(debug = true, highlight_on_page_load = true, feature_searchbars = true) {
+    
+    constructor(debug = true, highlight_on_page_load = true, feature_searchbars = true, feature_homepage = true) {
         this.debug = debug;
         this.highlight = highlight_on_page_load;
         this.feature_searchbars = feature_searchbars;
+        this.feature_homepage = feature_homepage;
 
         this.refreshLoop();
 
@@ -49,26 +52,35 @@ class WebsiteShortcuts {
         // inputs.push(document.querySelectorAll('input[type=text][name=search]'))
     }
 
+    // Common listener for all keyboard shortcuts
     kbShortcutListener() {
         // save object reference
         var self = this;
         function eventHandler(event) {
 
-            // searchbars feature
             if (event.ctrlKey) {
-                if (event.key === ' ') {
-                    if (self.filtered_input_fields.length > 0) {
-                       self.filtered_input_fields[0].focus();
-                        self.filtered_input_fields[0].select(); // select all text in searchbar 
-                    }
 
+                // searchbars feature
+                if (self.feature_searchbars) {
+                    if (event.key === ' ') {
+                        if (self.filtered_input_fields.length > 0) {
+                        self.filtered_input_fields[0].focus();
+                            self.filtered_input_fields[0].select(); // select all text in searchbar 
+                        }
+
+                    }
+                    else {
+                        self.searchbarsRefresh();
+                    }
                 }
-                else {
-                    self.searchbarsRefresh();
+
+                // homepage feature, if CTRL + H is pressed, go to / homepage
+                if (self.feature_homepage && event.key === 'h') {
+                        window.location.href = "/";
+                    }
                 }
             }
         }
-
             document.addEventListener('keydown', eventHandler);
     }
 
@@ -82,4 +94,5 @@ class WebsiteShortcuts {
         );
     }
 }
-var website_shortcuts = new WebsiteShortcuts(debug, highlight, feature_searchbars);
+
+var website_shortcuts = new WebsiteShortcuts(debug, highlight, feature_searchbars, feature_homepage);
