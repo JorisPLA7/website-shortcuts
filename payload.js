@@ -6,7 +6,7 @@ const feature_homepage = true;
 
 //select seqarch bars and open them on the associated keyboar shortcut.
 class WebsiteShortcuts {
-    
+
     constructor(debug = true, highlight_on_page_load = true, feature_searchbars = true, feature_homepage = true) {
         this.debug = debug;
         this.highlight = highlight_on_page_load;
@@ -34,9 +34,9 @@ class WebsiteShortcuts {
             return element.getBoundingClientRect().height > 0
                 && element.getBoundingClientRect().width > 0
                 && element.offsetParent !== null
-                && !element.disabled 
-                && !element.readOnly 
-                && element.style.visibility !== "hidden" 
+                && !element.disabled
+                && !element.readOnly
+                && element.style.visibility !== "hidden"
                 && element.style.display !== "none"; // breaks office.com
         });
 
@@ -64,7 +64,7 @@ class WebsiteShortcuts {
                 if (self.feature_searchbars) {
                     if (event.key === ' ') {
                         if (self.filtered_input_fields.length > 0) {
-                        self.filtered_input_fields[0].focus();
+                            self.filtered_input_fields[0].focus();
                             self.filtered_input_fields[0].select(); // select all text in searchbar 
                         }
 
@@ -76,12 +76,12 @@ class WebsiteShortcuts {
 
                 // homepage feature, if CTRL + H is pressed, go to / homepage
                 if (self.feature_homepage && event.key === 'h') {
-                        window.location.href = "/";
-                    }
+                    window.location.href = "/";
                 }
             }
         }
-            document.addEventListener('keydown', eventHandler);
+
+        document.addEventListener('keydown', eventHandler);
     }
 
     refresh_searchbars_listener_on_click() {
