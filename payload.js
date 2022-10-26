@@ -43,7 +43,7 @@ class Settings {
     // listen to changes on the settings and update the local settings
     listenToStorageChanges() {
         browser.storage.onChanged.addListener((changes, area) => {
-            if (area === "sync") {
+            if (area === "local") {
                 for (let key in changes) {
                     this[key] = changes[key].newValue;
                 }
@@ -53,16 +53,16 @@ class Settings {
 
     // write the settings to the browser sync storage on update
     pushToStorage() {
-        // browser.storage.sync.set(this);
+        browser.storage.local.set(this);
     }
 
     // force read from storage
     readStorage() {
-        // browser.storage.sync.get().then((result) => {
-        //     for (let key in result) {
-        //         this[key] = result[key];
-        //     }
-        // });
+        browser.storage.local.get().then((result) => {
+            for (let key in result) {
+                this[key] = result[key];
+            }
+        });
     }
 
 }
@@ -111,7 +111,7 @@ class WebsiteShortcuts {
                 && element.style.display !== "none"; // filter out invisible elements
         });
 
-        if (DEBUG) console.log(Settings.highlight ? "highlighting" : "not highlighting");
+        if (DEBUG) console.log(settings.highlight ? "highlighting" : "not highlighting");
 
         if (settings.highlight) {
             for (let i = 0; i < this.filtered_input_fields.length; i++) {
