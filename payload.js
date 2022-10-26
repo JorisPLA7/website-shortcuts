@@ -115,7 +115,10 @@ class WebsiteShortcuts {
 
         if (settings.highlight) {
             for (let i = 0; i < this.filtered_input_fields.length; i++) {
-                if (i == 0) this.filtered_input_fields[i].style.border = "1px solid rgba(255, 0, 0, 0.2)";
+                if (i == 0) {
+                    this.filtered_input_fields[i].style.border = "2px solid rgba(255, 0, 0, 0.25)";
+                    this.filtered_input_fields[i].style.borderRadius = "5px";
+                }
                 else this.text_fields[i].style.border = "1px solid green";
             }
         }

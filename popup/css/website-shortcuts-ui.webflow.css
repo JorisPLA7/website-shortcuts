@@ -261,12 +261,9 @@ body {
   -ms-transform: translateX(25px);
   transform: translateX(25px);
 
-  /* animation duration : 0.2s */
-
-  /* animation: slide 0.2s ease 0s 1 normal forwards; */
-
 }
 
+/* ununsed for the moment */
 @keyframes slide {
   0% {
     -webkit-transform: translateX(0px);
