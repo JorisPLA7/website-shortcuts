@@ -76,20 +76,51 @@ class Settings {
         browser.storage.sync.get().then((result) => {
             for (let key in result) {
                 this[key] = result[key];
-                console.log("found value ! key: " + key + " value: " + result[key]);
+                // console.log("found value ! key: " + key + " value: " + result[key]);
             }
         });
     }
 
 }
-var settings = new Settings();
 
 // create a new Settings object// pause the script for .1 second to allow the settings to be read from storage
-setTimeout(function () {
+function delayed(){
     console.log("settings: " + settings);
     console.log("settings.highlight: " + settings.highlight);
     console.log("settings.searchbars: " + settings.searchbars);
     console.log("settings.homepage: " + settings.homepage);
-}, 100);
+    
 
+    // select all the elements matching the toggle class
+    const toggleSwitches = document.querySelectorAll(".toggle");
+    
+    // initialize the toggle switches "toggle-ON" class based on the settings
+    toggleSwitches.forEach((toggleSwitch) => {
+        if (settings[toggleSwitch.id]) {
+            toggleSwitch.classList.add("toggle-ON");
+        } else {
+            toggleSwitch.classList.remove("toggle-ON");
+        }  
+    });
+
+
+    // list all the settings names 
+    const settingsNames = ["highlight", "searchbars", "homepage"];
+    for (let i = 0; i < toggleSwitches.length; i++) {
+        // add a listener to each toggle switch
+        toggleSwitches[i].addEventListener("click", () => {
+            // toggle the switch
+            toggleSwitches[i].classList.toggle("active");
+            // get the settings name from the settingsNames array
+            let settingName = settingsNames[i];
+            // update the settings object
+            settings[settingName] = !settings[settingName];
+        });
+    }
+
+}
+
+
+var settings = new Settings();
+setTimeout(delayed, 10);
 

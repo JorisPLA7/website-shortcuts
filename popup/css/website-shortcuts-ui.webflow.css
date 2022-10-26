@@ -241,12 +241,43 @@ body {
   -webkit-text-fill-color: inherit;
 }
 
+.toggle-ON {
+  background-color: #8c31df;
+  border: #000;
+  border-width: 3px;
+
+}
+
 .core-toggle {
   width: 21px;
   height: 21px;
   border-radius: 20px;
   background-color: #fff;
   box-shadow: none;
+}
+
+.toggle-ON .core-toggle {
+  -webkit-transform: translateX(25px);
+  -ms-transform: translateX(25px);
+  transform: translateX(25px);
+
+  /* animation duration : 0.2s */
+
+  /* animation: slide 0.2s ease 0s 1 normal forwards; */
+
+}
+
+@keyframes slide {
+  0% {
+    -webkit-transform: translateX(0px);
+    -ms-transform: translateX(0px);
+    transform: translateX(0px);
+  }
+  100% {
+    -webkit-transform: translateX(25px);
+    -ms-transform: translateX(25px);
+    transform: translateX(25px);
+  }
 }
 
 .shortcuts-section2 {
