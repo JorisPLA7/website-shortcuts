@@ -11,3 +11,5 @@ Browser extension to add an unique keyboard shortcut to open some webpage elemen
 - [ ] make it work with search bars hidden behind a search or hamburger button.
 - [ ] make it work with login forms hidden behind a login button.
 - [ ] Add a ui to explain and toggle features.
+- [ ] Fix existing searbar border destruction. when turned off
+- [ ] Fix val initialization in payload.js

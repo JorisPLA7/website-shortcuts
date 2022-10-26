@@ -22,6 +22,7 @@ class Settings {
     constructor() {
         this.readStorage();
         // this.listenToStorageChanges();
+        
     }
 
     // getters and setters
@@ -84,12 +85,11 @@ class Settings {
 }
 
 // create a new Settings object// pause the script for .1 second to allow the settings to be read from storage
+// sould be replaced with a promise later on to make sure the settings are read before the script continues and reduce the delay
 function delayed(){
-    console.log("settings: " + settings);
-    console.log("settings.highlight: " + settings.highlight);
-    console.log("settings.searchbars: " + settings.searchbars);
-    console.log("settings.homepage: " + settings.homepage);
-    
+    // console.log("settings.highlight "  settings.highlight + "  settings.searchbars: " + settings.searchbars + "  settings.homepage: " + settings.homepage);
+    //bold and red the logged booleans 
+    console.log("%csettings.highlight: " + settings.highlight + "  settings.searchbars: " + settings.searchbars + "  settings.homepage: " + settings.homepage, "color: blue; font-weight: bold;");
 
     // select all the elements matching the toggle class
     const toggleSwitches = document.querySelectorAll(".toggle");
@@ -105,20 +105,27 @@ function delayed(){
 
 
     // list all the settings names 
-    const settingsNames = ["highlight", "searchbars", "homepage"];
-    for (let i = 0; i < toggleSwitches.length; i++) {
-        // add a listener to each toggle switch
-        toggleSwitches[i].addEventListener("click", () => {
-            // toggle the switch
-            toggleSwitches[i].classList.toggle("active");
-            // get the settings name from the settingsNames array
-            let settingName = settingsNames[i];
-            // update the settings object
-            settings[settingName] = !settings[settingName];
+    // const settingsNames = ["searchbars", "highlight", "homepage"]; // breaks if the settings are not in the same order as the toggleSwitches, should be fixed later on
+    // fill an dict with toggleSwitches and their id as key   
+    const toggleSwitchesDict = {};
+    toggleSwitches.forEach((toggleSwitch) => {
+        toggleSwitchesDict[toggleSwitch.id] = toggleSwitch;
+    });
+    console.log(toggleSwitchesDict); 
+
+    // add a click event listener to all the toggle switches
+    // when clicked, toggle the "toggle-ON" class and update the associated setting
+    toggleSwitches.forEach((toggleSwitch) => {
+        toggleSwitch.addEventListener("click", () => {
+            toggleSwitch.classList.toggle("toggle-ON");
+            settings[toggleSwitch.id] = toggleSwitch.classList.contains("toggle-ON");
+            // log the setting name and its value
+            console.log(toggleSwitch.id + " changed to " + settings[toggleSwitch.id]);
         });
     }
-
+    );
 }
+
 
 
 var settings = new Settings();

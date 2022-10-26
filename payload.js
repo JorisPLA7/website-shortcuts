@@ -6,7 +6,20 @@ const DEBUG = false;
 class Settings {
     constructor() {
         this.readStorage();
-        // this.listenToStorageChanges();
+
+        
+        if (this._highlight === undefined) {
+            this._highlight = true;
+        }
+        if (this._searchbars === undefined) {
+            this._searchbars = true;
+        }
+        if (this._homepage === undefined) {
+            this._homepage = true;
+        }
+
+        this.listenToStorageChanges();
+
     }
 
     // getters and setters
@@ -44,8 +57,15 @@ class Settings {
     listenToStorageChanges() {
         browser.storage.onChanged.addListener((changes, area) => {
             if (area === "sync") {
+                // log a message in bold red 
                 for (let key in changes) {
                     this[key] = changes[key].newValue;
+                }
+                // log changes
+                for (let key in changes) {
+                    if (changes[key].oldValue !== changes[key].newValue) {
+                    console.log(`${key} changed from ${changes[key].oldValue} to ${changes[key].newValue}`);
+                    }
                 }
             }
         });
@@ -68,9 +88,6 @@ class Settings {
 }
 // create a new Settings object
 var settings = new Settings();
-settings.highlight = false;
-settings.searchbars = true;
-settings.homepage = true;
 
 console.log("settings.highlight: " + settings.highlight);
 console.log("settings.searchbars: " + settings.searchbars);
@@ -105,6 +122,9 @@ class WebsiteShortcuts {
     refreshLoop() {
         this.searchbarsRefresh();
         setTimeout(this.refreshLoop.bind(this), 1000);
+
+        // log the settings 
+        console.log("settings.highlight: " + settings.highlight + " settings.searchbars: " + settings.searchbars + " settings.homepage: " + settings.homepage);
     }
 
     searchbarsRefresh() {
@@ -129,6 +149,11 @@ class WebsiteShortcuts {
             for (let i = 0; i < this.filtered_input_fields.length; i++) {
                 if (i == 0) this.filtered_input_fields[i].style.border = "1px solid rgba(255, 0, 0, 0.2)";
                 else this.text_fields[i].style.border = "1px solid green";
+            }
+        }
+        else {
+            for (let i = 0; i < this.filtered_input_fields.length; i++) {
+                this.filtered_input_fields[i].style.border = "";
             }
         }
 
