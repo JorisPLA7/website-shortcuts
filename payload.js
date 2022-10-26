@@ -8,51 +8,43 @@ class Settings {
         this.readStorage();
 
         function delayed() {
+            if (DEBUG) {
+                console.log("Read from storage : hl: " + settings.highlight + " sb: " + settings.searchbars + " hp: " + settings.homepage);
+            }
             if (this._highlight === undefined) {
                 this._highlight = true;
+                console.log("Highlight feature setting not found in storage, setting to true");
             }
             if (this._searchbars === undefined) {
                 this._searchbars = true;
+                console.log("Searchbars feature setting not found in storage, setting to true");
             }
             if (this._homepage === undefined) {
                 this._homepage = true;
+                console.log("Homepage feature setting not found in storage, setting to true");
             }
         }
+        // wait for the storage to be read, should be replaced by a promise for better code quality
         setTimeout(delayed, 10);
 
         this.listenToStorageChanges();
-
     }
 
     // getters and setters
+    // setters are not meant to be used from this script
+    // if setters had to be used, they should call pushToStorage() after setting the value
+    // see popup.js for an example
     get highlight() {
-        this.readStorage();
+        // this.readStorage();
         return this._highlight;
     }
-
-    set highlight(value) {
-        this._highlight = value;
-        this.pushToStorage();
-    }
-
     get searchbars() {
-        this.readStorage();
+        // this.readStorage();
         return this._searchbars;
     }
-
-    set searchbars(value) {
-        this._searchbars = value;
-        this.pushToStorage();
-    }
-
     get homepage() {
-        this.readStorage();
+        // this.readStorage();
         return this._homepage;
-    }
-
-    set homepage(value) {
-        this._homepage = value;
-        this.pushToStorage();
     }
 
     // listen to changes on the settings and update the sync settings
@@ -62,10 +54,8 @@ class Settings {
                 // log a message in bold red 
                 for (let key in changes) {
                     this[key] = changes[key].newValue;
-                }
-                // log changes
-                for (let key in changes) {
-                    if (changes[key].oldValue !== changes[key].newValue) {
+
+                    if (DEBUG && changes[key].oldValue !== changes[key].newValue) {
                         console.log(`${key} changed from ${changes[key].oldValue} to ${changes[key].newValue}`);
                     }
                 }
@@ -91,42 +81,18 @@ class Settings {
 // create a new Settings object
 var settings = new Settings();
 
-console.log("settings.highlight: " + settings.highlight);
-console.log("settings.searchbars: " + settings.searchbars);
-console.log("settings.homepage: " + settings.homepage);
-
-
-// Settings.highlight = true;
-// Settings.searchbars = true;
-// Settings.homepage = true;
-
 //select search bars and open them on the associated keyboar shortcut.
 class WebsiteShortcuts {
 
-    constructor(debug = true,) {
-        this.debug = debug;
+    constructor() {
         this.refreshLoop();
         this.kbShortcutListener();
         this.listenToRuntimeMessages();
     }
 
-    listenToRuntimeMessages() {
-        browser.runtime.onMessage.addListener((message) => {
-            if (message.command === "test") {
-                console.log("test message received");
-            }
-            else {
-                console.log("unknown message received");
-            }
-        });
-    }
-
     refreshLoop() {
         this.searchbarsRefresh();
         setTimeout(this.refreshLoop.bind(this), 1000);
-
-        // log the settings 
-        console.log("settings.highlight: " + settings.highlight + " settings.searchbars: " + settings.searchbars + " settings.homepage: " + settings.homepage);
     }
 
     searchbarsRefresh() {
@@ -174,17 +140,17 @@ class WebsiteShortcuts {
                     if (event.key === ' ') {
                         if (self.filtered_input_fields.length > 0) {
                             self.filtered_input_fields[0].focus();
-                            self.filtered_input_fields[0].select(); // select all text in searchbar 
+                            self.filtered_input_fields[0].setSelectionRange(self.filtered_input_fields[0].value.length, self.filtered_input_fields[0].value.length);
                         }
-
                     }
                     else {
                         self.searchbarsRefresh();
                     }
                 }
 
-                // homepage feature, if CTRL + H is pressed, go to / homepage
+                // homepage feature
                 if (settings.homepage && event.key === 'h') {
+                    // TODO keep the region in the url
                     window.location.href = "/";
                 }
             }
@@ -194,6 +160,7 @@ class WebsiteShortcuts {
 
     refresh_searchbars_listener_on_click() {
         // on click, refresh the search bars
+        // so, opening a new menu showing a potential search bar will highlight it instantly
         var self = this;
         document.addEventListener('click', function () {
             self.searchbarsRefresh();
@@ -203,4 +170,4 @@ class WebsiteShortcuts {
     }
 }
 
-var website_shortcuts = new WebsiteShortcuts(DEBUG);
+var website_shortcuts = new WebsiteShortcuts();
