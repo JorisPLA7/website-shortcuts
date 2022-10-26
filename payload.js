@@ -7,16 +7,18 @@ class Settings {
     constructor() {
         this.readStorage();
 
-        
-        if (this._highlight === undefined) {
-            this._highlight = true;
+        function delayed() {
+            if (this._highlight === undefined) {
+                this._highlight = true;
+            }
+            if (this._searchbars === undefined) {
+                this._searchbars = true;
+            }
+            if (this._homepage === undefined) {
+                this._homepage = true;
+            }
         }
-        if (this._searchbars === undefined) {
-            this._searchbars = true;
-        }
-        if (this._homepage === undefined) {
-            this._homepage = true;
-        }
+        setTimeout(delayed, 10);
 
         this.listenToStorageChanges();
 
@@ -64,7 +66,7 @@ class Settings {
                 // log changes
                 for (let key in changes) {
                     if (changes[key].oldValue !== changes[key].newValue) {
-                    console.log(`${key} changed from ${changes[key].oldValue} to ${changes[key].newValue}`);
+                        console.log(`${key} changed from ${changes[key].oldValue} to ${changes[key].newValue}`);
                     }
                 }
             }
