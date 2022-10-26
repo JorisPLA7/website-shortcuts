@@ -1,96 +1,95 @@
-console.log("popup.js")
+console.log("popup.js started");
+// content-script.js
 
-// class Settings {
-//     constructor() {
-
-//         // make it a singleton
-//         if (Settings.instance) {
-//             return Settings.instance;
-//         }
-//         else {
-//             // throw error
-//             throw new Error("Settings is a singleton. Use Settings.getInstance() to get the instance.");
-//         }
-        
-//     }
-
-//     // getters and setters
-//     get highlight() {
-//         return this._highlight;
-//     }
-
-//     set highlight(value) {
-//         this._highlight = value;
-//     this.update();
-//     }
-
-//     get searchbars() {
-//         return this._searchbars;
-//     }
-
-//     set searchbars(value) {
-//         this._searchbars = value;
-//         this.update();
-//     }
-
-//     get homepage() {
-//         return this._homepage;
-//     }
-
-//     set homepage(value) {
-//         this._homepage = value;
-//         this.update();
-//     }
-
-//     // listen to changes on the settings and update the local settings
-//     listen() {
-//         browser.storage.onChanged.addListener((changes, area) => {
-//             if (area === "sync") {
-//                 for (let key in changes) {
-//                     this[key] = changes[key].newValue;
-//                 }
-//             }
-//         });
-//     }
-
-//     // force read from storage
-//     readStorage() {
-//         browser.storage.sync.get().then((settings) => {
-//             for (let key in settings) {
-//                 this[key] = settings[key];
-//             }
-//         });
-//     }
-
-//     // write the settings to the browser sync storage on update
-//     update() {
-//         browser.storage.sync.set(this);
-//     }
-
-//     // call update() on each change
-//     set(key, value) {
-//         this[key] = value;
-//         this.update();
-//     }
-
+// function handleResponse(message) {
+//     console.log(`Message from the background script: ${message.response}`);
 // }
 
-// function main() {
-    
-//     Settings.readStorage();
-//     console.log("Settings : " + Settings.highlight, Settings.searchbars, Settings.homepage);
-
+// function handleError(error) {
+//     console.log(`Error: ${error}`);
 // }
 
-
-// call main() when the 
-
-// import { Settings } from "./settings.js";
-
-// function logHighlight() {
-//     console.log("popup.js: logHighlight()");
-//     console.log(Settings.highlight + " " + Settings.searchbars + " " + Settings.homepage + " in popup.js");
+// function notifyBackgroundPage(e) {
+//     const sending = browser.runtime.sendMessage({
+//         greeting: "Greeting from the content script",
+//     });
+//     sending.then(handleResponse, handleError);
 // }
 
-// logHighlight();
+// window.addEventListener("click", notifyBackgroundPage);
+
+class Settings {
+    constructor() {
+        this.readStorage();
+        // this.listenToStorageChanges();
+    }
+
+    // getters and setters
+    get highlight() {
+        this.readStorage();
+        return this._highlight;
+    }
+
+    set highlight(value) {
+        this._highlight = value;
+        this.pushToStorage();
+    }
+
+    get searchbars() {
+        this.readStorage();
+        return this._searchbars;
+    }
+
+    set searchbars(value) {
+        this._searchbars = value;
+        this.pushToStorage();
+    }
+
+    get homepage() {
+        this.readStorage();
+        return this._homepage;
+    }
+
+    set homepage(value) {
+        this._homepage = value;
+        this.pushToStorage();
+    }
+
+    // listen to changes on the settings and update the sync settings
+    listenToStorageChanges() {
+        browser.storage.onChanged.addListener((changes, area) => {
+            if (area === "sync") {
+                for (let key in changes) {
+                    this[key] = changes[key].newValue;
+                }
+            }
+        });
+    }
+
+    // write the settings to the browser sync storage on update
+    pushToStorage() {
+        browser.storage.sync.set(this);
+    }
+
+    // force read from storage
+    readStorage() {
+        browser.storage.sync.get().then((result) => {
+            for (let key in result) {
+                this[key] = result[key];
+                console.log("found value ! key: " + key + " value: " + result[key]);
+            }
+        });
+    }
+
+}
+var settings = new Settings();
+
+// create a new Settings object// pause the script for .1 second to allow the settings to be read from storage
+setTimeout(function () {
+    console.log("settings: " + settings);
+    console.log("settings.highlight: " + settings.highlight);
+    console.log("settings.searchbars: " + settings.searchbars);
+    console.log("settings.homepage: " + settings.homepage);
+}, 100);
+
 

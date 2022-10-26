@@ -1,5 +1,5 @@
 
-const DEBUG = true;
+const DEBUG = false;
 
 // wrapper to read and write the settings on the browser sync storage
 
@@ -68,7 +68,7 @@ class Settings {
 }
 // create a new Settings object
 var settings = new Settings();
-settings.highlight = true;
+settings.highlight = false;
 settings.searchbars = true;
 settings.homepage = true;
 
@@ -88,6 +88,18 @@ class WebsiteShortcuts {
         this.debug = debug;
         this.refreshLoop();
         this.kbShortcutListener();
+        this.listenToRuntimeMessages();
+    }
+
+    listenToRuntimeMessages() {
+        browser.runtime.onMessage.addListener((message) => {
+            if (message.command === "test") {
+                console.log("test message received");
+            }
+            else {
+                console.log("unknown message received");
+            }
+        });
     }
 
     refreshLoop() {
