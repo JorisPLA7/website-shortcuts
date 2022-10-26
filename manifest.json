@@ -19,11 +19,7 @@
     "128": "icons/logo-128-.png"
   },
   "permissions": [
-    "<all_urls>",
-    "activeTab",
-    "tabs",
-    "storage",
-    "webRequest"
+    "storage"
   ],
   "content_scripts": [
     {
