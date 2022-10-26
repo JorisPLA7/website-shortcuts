@@ -4,11 +4,21 @@
   "name": "Website Shortcuts",
   "version": "1.2",
 
+  "browser_action": {
+    "default_icon": "icons/logo.png",
+    "default_title": "Website Shortcuts",
+    "default_popup": "popup/popup.html"
+  },
+
 "description": "Ctrl + Space to search. \nPress Ctrl + H to move to home page",
 
   "icons": {
-    "48": "icons/magnifier.png"
+    "32": "icons/logo.png",
+    "64": "icons/logo-64-.png",
+    "128": "icons/logo-128-.png"
   },
+
+  "permissions": ["storage"],  
 
   "content_scripts": [
     {
@@ -16,6 +26,7 @@
       "run_at": "document_end",
       "js": ["payload.js"]
     }
+  
   ]
 
 }
