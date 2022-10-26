@@ -4,6 +4,12 @@
   "name": "Website Shortcuts",
   "version": "1.2",
 
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{d550f93a-3b5d-411d-b86d-b4fe9b0bbb0d}"
+    }
+  },
+
   "browser_action": {
     "default_icon": "icons/logo.png",
     "default_title": "Website Shortcuts",

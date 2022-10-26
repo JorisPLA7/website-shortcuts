@@ -40,10 +40,10 @@ class Settings {
         this.pushToStorage();
     }
 
-    // listen to changes on the settings and update the local settings
+    // listen to changes on the settings and update the sync settings
     listenToStorageChanges() {
         browser.storage.onChanged.addListener((changes, area) => {
-            if (area === "local") {
+            if (area === "sync") {
                 for (let key in changes) {
                     this[key] = changes[key].newValue;
                 }
@@ -53,12 +53,12 @@ class Settings {
 
     // write the settings to the browser sync storage on update
     pushToStorage() {
-        browser.storage.local.set(this);
+        browser.storage.sync.set(this);
     }
 
     // force read from storage
     readStorage() {
-        browser.storage.local.get().then((result) => {
+        browser.storage.sync.get().then((result) => {
             for (let key in result) {
                 this[key] = result[key];
             }
