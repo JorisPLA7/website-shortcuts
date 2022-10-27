@@ -1,8 +1,8 @@
 
 const DEBUG = false;
 
-var browser = chrome;
-
+// ternary operator to set browser to chrome or browser
+var browser = (typeof browser === "undefined") ? chrome : browser;
 
 // wrapper to read and write the settings on the browser sync storage
 

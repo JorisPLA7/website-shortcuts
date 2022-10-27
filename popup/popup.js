@@ -1,5 +1,6 @@
-var browser = chrome;
 
+// ternary operator to set browser to chrome or browser
+var browser = (typeof browser === "undefined") ? chrome : browser;
 
 class Settings {
     constructor() {
