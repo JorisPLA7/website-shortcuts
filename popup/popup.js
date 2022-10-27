@@ -1,4 +1,5 @@
-console.log("popup.js started");
+var browser = chrome;
+
 
 class Settings {
     constructor() {
@@ -103,5 +104,5 @@ function delayed() {
 }
 
 var settings = new Settings();
-setTimeout(delayed, 10);
+setTimeout(delayed,15);
 

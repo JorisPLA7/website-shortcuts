@@ -1,13 +1,8 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Website Shortcuts",
-  "version": "2",
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "{d550f93a-3b5d-411d-b86d-b4fe9b0bbb0d}"
-    }
-  },
-  "browser_action": {
+  "version": "2.0.1",
+  "action": {
     "default_icon": "icons/logo.png",
     "default_title": "Website Shortcuts",
     "default_popup": "popup/popup.html"

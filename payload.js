@@ -1,31 +1,35 @@
 
 const DEBUG = false;
 
+var browser = chrome;
+
+
 // wrapper to read and write the settings on the browser sync storage
 
 class Settings {
     constructor() {
         this.readStorage();
 
-        function delayed() {
+        function delayed(self) {
             if (DEBUG) {
                 console.log("Read from storage : hl: " + settings.highlight + " sb: " + settings.searchbars + " hp: " + settings.homepage);
             }
-            if (this._highlight === undefined) {
-                this._highlight = true;
+            if (self._highlight === undefined) {
+                self._highlight = true;
                 console.log("Highlight feature setting not found in storage, setting to true");
             }
-            if (this._searchbars === undefined) {
-                this._searchbars = true;
+            if (self._searchbars === undefined) {
+                self._searchbars = true;
                 console.log("Searchbars feature setting not found in storage, setting to true");
             }
-            if (this._homepage === undefined) {
-                this._homepage = true;
+            if (self._homepage === undefined) {
+                self._homepage = true;
                 console.log("Homepage feature setting not found in storage, setting to true");
             }
+            self.pushToStorage();
         }
         // wait for the storage to be read, should be replaced by a promise for better code quality
-        setTimeout(delayed, 10);
+        setTimeout(delayed(this), 10);
 
         this.listenToStorageChanges();
     }
@@ -70,11 +74,18 @@ class Settings {
 
     // force read from storage
     readStorage() {
+        // catch error if browser is not defined
+        
+        try {
         browser.storage.sync.get().then((result) => {
             for (let key in result) {
                 this[key] = result[key];
             }
         });
+        } catch (e) {
+            console.log("Error while reading storage");
+        }
+        
     }
 
 }
@@ -97,18 +108,12 @@ class WebsiteShortcuts {
 
     searchbarsRefresh() {
         this.focused_id = 0;
-        this.search_fields = document.querySelectorAll('input[type=search]')
+        this.search_fields = document.querySelectorAll('input[type=search]');
         this.text_fields = document.querySelectorAll("input[type=text]");
         this.all_input_fields = [...this.search_fields, ...this.text_fields];
 
         this.filtered_input_fields = this.all_input_fields.filter((element) => {
-            return element.getBoundingClientRect().height > 0
-                && element.getBoundingClientRect().width > 0
-                && element.offsetParent !== null
-                && !element.disabled
-                && !element.readOnly
-                && element.style.visibility !== "hidden" // filter out hidden elements 
-                && element.style.display !== "none"; // filter out invisible elements
+            return element.getBoundingClientRect().height > 0 && element.getBoundingClientRect().width > 0 && element.offsetParent !== null && !element.disabled && !element.readOnly && element.style.visibility !== "hidden"; // filter out hidden elements  && element.style.display !== "none"; // filter out invisible elements
         });
 
         if (DEBUG) console.log(settings.highlight ? "highlighting" : "not highlighting");
