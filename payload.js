@@ -98,7 +98,6 @@ class WebsiteShortcuts {
     constructor() {
         this.refreshLoop();
         this.kbShortcutListener();
-        this.listenToRuntimeMessages();
     }
 
     refreshLoop() {
