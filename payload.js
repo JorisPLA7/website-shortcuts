@@ -107,9 +107,9 @@ class WebsiteShortcuts {
 
     searchbarsRefresh() {
         this.focused_id = 0;
-        this.search_fields = document.querySelectorAll('input[type=search]');
-        this.text_fields = document.querySelectorAll("input[type=text]");
-        this.all_input_fields = [...this.search_fields, ...this.text_fields];
+        // We can't use CSS selectors "input[type=text], input[type=search]" for this because an input without type
+        // defaults to type "text". See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#input_types
+        this.all_input_fields = [ ...document.querySelectorAll("input")].filter(e => e.type === "text" || e.type === "search")
 
         this.filtered_input_fields = this.all_input_fields.filter((element) => {
             return element.getBoundingClientRect().height > 0 && element.getBoundingClientRect().width > 0 && element.offsetParent !== null && !element.disabled && !element.readOnly && element.style.visibility !== "hidden"; // filter out hidden elements  && element.style.display !== "none"; // filter out invisible elements
@@ -123,7 +123,7 @@ class WebsiteShortcuts {
                     this.filtered_input_fields[i].style.border = "2px solid rgba(255, 0, 0, 0.25)";
                     this.filtered_input_fields[i].style.borderRadius = "5px";
                 }
-                else this.text_fields[i].style.border = "1px solid green";
+                else this.all_input_fields[i].style.border = "1px solid green";
             }
         }
         else {
