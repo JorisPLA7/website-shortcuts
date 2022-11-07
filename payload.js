@@ -75,17 +75,17 @@ class Settings {
     // force read from storage
     readStorage() {
         // catch error if browser is not defined
-        
+
         try {
-        browser.storage.sync.get().then((result) => {
-            for (let key in result) {
-                this[key] = result[key];
-            }
-        });
+            browser.storage.sync.get().then((result) => {
+                for (let key in result) {
+                    this[key] = result[key];
+                }
+            });
         } catch (e) {
             console.log("Error while reading storage");
         }
-        
+
     }
 
 }
@@ -134,6 +134,14 @@ class WebsiteShortcuts {
 
     }
 
+    searchbarSelect() {
+        if (this.filtered_input_fields.length > 0) {
+            this.filtered_input_fields[0].focus();
+            this.filtered_input_fields[0].setSelectionRange(this.filtered_input_fields[0].value.length, this.filtered_input_fields[0].value.length);
+        }
+        
+    }
+
     // Common listener for all keyboard shortcuts
     kbShortcutListener() {
         // save object reference
@@ -148,18 +156,18 @@ class WebsiteShortcuts {
             // searchbars feature
             if (settings.searchbars && event.ctrlKey && event.key == " ") {
                 if (self.filtered_input_fields.length > 0) {
-                            self.filtered_input_fields[0].focus();
-                            self.filtered_input_fields[0].setSelectionRange(self.filtered_input_fields[0].value.length, self.filtered_input_fields[0].value.length);
-                        }
+                    self.filtered_input_fields[0].focus();
+                    self.filtered_input_fields[0].setSelectionRange(self.filtered_input_fields[0].value.length, self.filtered_input_fields[0].value.length);
                 }
             }
+        }
 
-            // // homepage feature
-            // if (settings.homepage && event.shiftKey && event.key === 'h') {
-            //     // TODO keep the region in the url
-            //     console.log("Going to homepage");
-            //     window.location.href = "/";
-            // }
+        // // homepage feature
+        // if (settings.homepage && event.shiftKey && event.key === 'h') {
+        //     // TODO keep the region in the url
+        //     console.log("Going to homepage");
+        //     window.location.href = "/";
+        // }
         document.addEventListener('keydown', eventHandler);
     }
 
@@ -175,4 +183,17 @@ class WebsiteShortcuts {
     }
 }
 
+// signle instance of the class
 var website_shortcuts = new WebsiteShortcuts();
+
+chrome.runtime.onMessage.addListener(
+    function (request, sender, sendResponse) {
+        console.log(sender.tab ?
+            "from a content script:" + sender.tab.url :
+            "from the extension");
+        if (request.greeting === "hello") {
+            website_shortcuts.searchbarSelect();
+            sendResponse({ farewell: "goodbye" });
+        }
+    }
+);
