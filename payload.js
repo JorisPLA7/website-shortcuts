@@ -140,28 +140,26 @@ class WebsiteShortcuts {
         var self = this;
         function eventHandler(event) {
 
+            // if only ctrl is pressed, refresh the search bars
             if (event.ctrlKey) {
+                self.searchbarsRefresh();
+            }
 
-                // searchbars feature
-                if (settings.searchbars) {
-                    if (event.key === ' ') {
-                        if (self.filtered_input_fields.length > 0) {
+            // searchbars feature
+            if (settings.searchbars && event.ctrlKey && event.key == " ") {
+                if (self.filtered_input_fields.length > 0) {
                             self.filtered_input_fields[0].focus();
                             self.filtered_input_fields[0].setSelectionRange(self.filtered_input_fields[0].value.length, self.filtered_input_fields[0].value.length);
                         }
-                    }
-                    else {
-                        self.searchbarsRefresh();
-                    }
-                }
-
-                // homepage feature
-                if (settings.homepage && event.key === 'h') {
-                    // TODO keep the region in the url
-                    window.location.href = "/";
                 }
             }
-        }
+
+            // // homepage feature
+            // if (settings.homepage && event.shiftKey && event.key === 'h') {
+            //     // TODO keep the region in the url
+            //     console.log("Going to homepage");
+            //     window.location.href = "/";
+            // }
         document.addEventListener('keydown', eventHandler);
     }
 

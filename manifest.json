@@ -1,25 +1,53 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Website Shortcuts",
-  "version": "2.0.1",
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "{d550f93a-3b5d-411d-b86d-b4fe9b0bbb0d}"
-    }
-  },
-  "browser_action": {
+  "version": "2.0.2",
+
+  "action": {
     "default_icon": "icons/logo.png",
     "default_title": "Website Shortcuts",
     "default_popup": "popup/popup.html"
   },
-  "description": "Ctrl + Space to search. \nPress Ctrl + H to move to home page",
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+U",
+        "mac": "Command+U"
+      }
+    },
+    "reach_homepage": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Y",
+        "mac": "MacCtrl+Shift+Y"
+      },
+      "description": "Inject a script on the page"
+    },
+    "searchbar_focus": {
+      "suggested_key": {
+        "default": "Ctrl+Space",
+        "mac": "MacCtrl+Space"
+      },
+      "description": "Inject a script on the page"
+    }
+  },
+  
+  "author": "Joris Placette",
+
+  "description": "Reach that searchbar without leaving the keyboard.",
   "icons": {
     "32": "icons/logo.png",
     "64": "icons/logo-64-.png",
     "128": "icons/logo-128-.png"
   },
   "permissions": [
-    "storage"
+    "storage",
+    "activeTab", 
+    "scripting"
   ],
   "content_scripts": [
     {
