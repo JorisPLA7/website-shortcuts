@@ -1,5 +1,5 @@
 
-const DEBUG = false;
+const DEBUG = true;
 
 // ternary operator to set browser to chrome or browser
 var browser = (typeof browser === "undefined") ? chrome : browser;
@@ -10,26 +10,23 @@ class Settings {
     constructor() {
         this.readStorage();
 
-        function delayed(self) {
-            if (DEBUG) {
-                console.log("Read from storage : hl: " + settings.highlight + " sb: " + settings.searchbars + " hp: " + settings.homepage);
-            }
-            if (self._highlight === undefined) {
-                self._highlight = true;
-                console.log("Highlight feature setting not found in storage, setting to true");
-            }
-            if (self._searchbars === undefined) {
-                self._searchbars = true;
-                console.log("Searchbars feature setting not found in storage, setting to true");
-            }
-            if (self._homepage === undefined) {
-                self._homepage = true;
-                console.log("Homepage feature setting not found in storage, setting to true");
-            }
-            self.pushToStorage();
-        }
-        // wait for the storage to be read, should be replaced by a promise for better code quality
-        setTimeout(delayed(this), 10);
+        // function delayed(self) {
+        //     if (self._highlight === undefined) {
+        //         self._highlight = true;
+        //         console.log("Highlight feature setting not found in storage, setting to true");
+        //     }
+        //     if (self._searchbars === undefined) {
+        //         self._searchbars = true;
+        //         console.log("Searchbars feature setting not found in storage, setting to true");
+        //     }
+        //     if (self._homepage === undefined) {
+        //         self._homepage = true;
+        //         console.log("Homepage feature setting not found in storage, setting to true");
+        //     }
+        //     self.pushToStorage();
+        // }
+        // // wait for the storage to be read, should be replaced by a promise for better code quality
+        // setTimeout(delayed(this), 100);
 
         this.listenToStorageChanges();
     }
@@ -75,12 +72,13 @@ class Settings {
     // force read from storage
     readStorage() {
         // catch error if browser is not defined
-
+        console.log("reading storage"); 
         try {
             browser.storage.sync.get().then((result) => {
                 for (let key in result) {
                     this[key] = result[key];
                 }
+                if (DEBUG) console.log(result);
             });
         } catch (e) {
             console.log("Error while reading storage");
@@ -112,7 +110,8 @@ class WebsiteShortcuts {
         this.all_input_fields = [...this.search_fields, ...this.text_fields];
 
         this.filtered_input_fields = this.all_input_fields.filter((element) => {
-            return element.getBoundingClientRect().height > 0 && element.getBoundingClientRect().width > 0 && element.offsetParent !== null && !element.disabled && !element.readOnly && element.style.visibility !== "hidden"; // filter out hidden elements  && element.style.display !== "none"; // filter out invisible elements
+            // filter out hidden elements  && element.style.display !== "none"; // filter out invisible elements
+            return element.getBoundingClientRect().height > 0 && element.getBoundingClientRect().width > 0 && element.offsetParent !== null && !element.disabled && !element.readOnly && element.style.visibility !== "hidden";
         });
 
         if (DEBUG) console.log(settings.highlight ? "highlighting" : "not highlighting");
@@ -135,12 +134,21 @@ class WebsiteShortcuts {
     }
 
     searchbarSelect() {
-        if (this.filtered_input_fields.length > 0) {
-            this.filtered_input_fields[0].focus();
-            this.filtered_input_fields[0].setSelectionRange(this.filtered_input_fields[0].value.length, this.filtered_input_fields[0].value.length);
+        if (settings.searchbars) {
+            if (this.filtered_input_fields.length > 0) {
+                this.filtered_input_fields[0].focus();
+                this.filtered_input_fields[0].setSelectionRange(this.filtered_input_fields[0].value.length, this.filtered_input_fields[0].value.length);
+            }
         }
-        
+
     }
+
+    reachHomepage() {
+        if (settings.homepage) {
+            window.location.href = "/";
+        }
+    }
+
 
     // Common listener for all keyboard shortcuts
     kbShortcutListener() {
@@ -152,22 +160,7 @@ class WebsiteShortcuts {
             if (event.ctrlKey) {
                 self.searchbarsRefresh();
             }
-
-            // searchbars feature
-            if (settings.searchbars && event.ctrlKey && event.key == " ") {
-                if (self.filtered_input_fields.length > 0) {
-                    self.filtered_input_fields[0].focus();
-                    self.filtered_input_fields[0].setSelectionRange(self.filtered_input_fields[0].value.length, self.filtered_input_fields[0].value.length);
-                }
-            }
         }
-
-        // // homepage feature
-        // if (settings.homepage && event.shiftKey && event.key === 'h') {
-        //     // TODO keep the region in the url
-        //     console.log("Going to homepage");
-        //     window.location.href = "/";
-        // }
         document.addEventListener('keydown', eventHandler);
     }
 
@@ -186,14 +179,22 @@ class WebsiteShortcuts {
 // signle instance of the class
 var website_shortcuts = new WebsiteShortcuts();
 
+// listen for messages from background.js
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
         console.log(sender.tab ?
             "from a content script:" + sender.tab.url :
             "from the extension");
-        if (request.greeting === "hello") {
+        if (request.action === "searchbar_focus") {
             website_shortcuts.searchbarSelect();
-            sendResponse({ farewell: "goodbye" });
         }
+        else if (request.action === "reach_homepage") {
+            website_shortcuts.reachHomepage();
+        }
+        else {
+            // send bad response
+            sendResponse({ error: "unknown action" , success: false});
+        }
+        sendResponse({ success: true });
     }
 );

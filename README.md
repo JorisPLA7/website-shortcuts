@@ -6,9 +6,14 @@ Browser extension to add an unique keyboard shortcut to open some webpage elemen
 
 # Next ideas to implement
 
+- [ ] update the UI 
+    - [ ] separate webflow and custom css
+    - [ ] replace the shortcuts with an edit link to the extensions shortcut edit page
+        - Firefox: `about:addons > Extensions > Manage Extension Shortcuts`
+        - Chrome: `chrome://extensions/shortcuts`
 - `Ctrl + L` to open the login page/form
+- [ ] Verify command registered on action popup load : `https://developer.chrome.com/docs/extensions/reference/commands/#verify-commands-registered`
 - [ ] support localized homepages such as `https://www.example.com/fr/` or `https://www.example.com/en/`
-- [ ] make it work with search bars hidden behind a search or hamburger button.
+- [ ] enable focus search bars hidden behind a menu button.
 - [ ] make it work with login forms hidden behind a login button.
-- [ ] Add a ui to explain and toggle features.
-- [ ] Fix existing searbar border destruction. when turned off
+- [ ] Fix existing searbar border destruction when the extension is turned off

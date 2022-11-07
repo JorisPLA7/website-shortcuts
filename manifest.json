@@ -18,21 +18,22 @@
       "suggested_key": {
         "default": "Ctrl+U",
         "mac": "Command+U"
-      }
+      },
+      "description": "Open the settings popup"
     },
     "reach_homepage": {
       "suggested_key": {
         "default": "Ctrl+Shift+Y",
         "mac": "MacCtrl+Shift+Y"
       },
-      "description": "Inject a script on the page"
+      "description": "Reach the homepage"
     },
     "searchbar_focus": {
       "suggested_key": {
         "default": "Ctrl+Space",
         "mac": "MacCtrl+Space"
       },
-      "description": "Inject a script on the page"
+      "description": "Focus the searchbar"
     }
   },
   
