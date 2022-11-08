@@ -1,5 +1,5 @@
 
-const DEBUG = true;
+const DEBUG = false;
 
 // ternary operator to set browser to chrome or browser
 var browser = (typeof browser === "undefined") ? chrome : browser;
@@ -9,6 +9,9 @@ var browser = (typeof browser === "undefined") ? chrome : browser;
 class Settings {
     constructor() {
         this.readStorage();
+
+
+        // TODO repair and restore, time to use promises.
 
         // function delayed(self) {
         //     if (self._highlight === undefined) {

@@ -1,4 +1,4 @@
-const DEBUG = true;
+const DEBUG = false;
 
 function reachHomepage() {
     window.location.href = "/";

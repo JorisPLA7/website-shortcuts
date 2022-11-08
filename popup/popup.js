@@ -66,6 +66,21 @@ class Settings {
 
 }
 
+
+// if chrome, hide the elem
+if (typeof chrome === "undefined") {
+    document.querySelectorAll(".firefox-only").forEach((element) => {
+        element.style.display = "none";
+    });
+}
+else {
+    document.querySelectorAll(".chromium-only").forEach((element) => {
+        element.style.display = "none";
+    });
+}
+
+
+
 // create a new Settings object// pause the script for .1 second to allow the settings to be read from storage
 // sould be replaced with a promise later on to make sure the settings are read before the script continues and reduce the delay
 function delayed() {
