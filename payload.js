@@ -1,5 +1,4 @@
-console.log("payload.js loaded");
-const DEBUG = false;
+const DEBUG = true;
 // ternary operator to set browser to chrome or browser
 var browser = (typeof browser === "undefined") ? chrome : browser;
 
@@ -41,28 +40,34 @@ class WebsiteShortcuts {
             return element.getBoundingClientRect().height > 0 && element.getBoundingClientRect().width > 0 && element.offsetParent !== null && !element.disabled && !element.readOnly && element.style.visibility !== "hidden";
         });
 
-        browser.storage.sync.get("highlight", (result) => {
-            if (result.highlight) {
-                this.filtered_input_fields.forEach((element) => {
-                    element.style.outline = "2px solid rgba(255, 0, 0, 0.25)";
-                    element.style.outlineRadius = "5px";
-                });
-                // }
-                // for (let i = 0; i < this.filtered_input_fields.length; i++) {
-                //     if (i == 0) {
-                //         this.filtered_input_fields[i].style.border = "2px solid rgba(255, 0, 0, 0.25)";
-                //         this.filtered_input_fields[i].style.borderRadius = "5px";
-                //     }
-                //     else this.text_fields[i].style.border = "1px solid green";
-                // }
-            }
-            else {
-                for (let i = 0; i < this.filtered_input_fields.length; i++) {
-                    this.filtered_input_fields[i].style.border = "";
+        // TODO fix Uncaught Error: Extension context invalidated.
+        try{
+            browser.storage.sync.get("highlight", (result) => {
+                if (result.highlight) {
+                    this.filtered_input_fields.forEach((element) => {
+                        element.style.outline = "2px solid rgba(255, 0, 0, 0.25)";
+                        element.style.outlineRadius = "5px";
+                    });
+                    // }
+                    // for (let i = 0; i < this.filtered_input_fields.length; i++) {
+                    //     if (i == 0) {
+                    //         this.filtered_input_fields[i].style.border = "2px solid rgba(255, 0, 0, 0.25)";
+                    //         this.filtered_input_fields[i].style.borderRadius = "5px";
+                    //     }
+                    //     else this.text_fields[i].style.border = "1px solid green";
+                    // }
                 }
-            }
-
-        });
+                else {
+                    for (let i = 0; i < this.filtered_input_fields.length; i++) {
+                        this.filtered_input_fields[i].style.outline = "none";
+                    }
+                }
+    
+            });
+        }
+        catch(e){
+            console.log(e);
+        }
 
     }
 
@@ -117,7 +122,11 @@ var website_shortcuts = new WebsiteShortcuts();
 // listen for messages from background.js
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
-        if (DEBUG) console.log("message received : " + request.action);
+        if (DEBUG) {
+            console.log("message received : " + request.action);
+            browser.storage.sync.get().then((result) => { console.log(result); });
+        }
+        
         if (request.action === "searchbar_focus") {
             website_shortcuts.searchbarSelect();
         }
@@ -131,3 +140,6 @@ chrome.runtime.onMessage.addListener(
         sendResponse({ success: true });
     }
 );
+
+console.log("payload.js ended");
+browser.storage.sync.get().then((result) => { console.log(result); });

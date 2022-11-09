@@ -24,7 +24,7 @@
     "reach_homepage": {
       "suggested_key": {
         "default": "Ctrl+Shift+Y",
-        "mac": "MacCtrl+Shift+Y"
+        "mac": "MacCtrl+H"
       },
       "description": "Reach the homepage"
     },
