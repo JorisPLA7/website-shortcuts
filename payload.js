@@ -1,19 +1,18 @@
-const DEBUG = true;
+const DEBUG = false;
 // ternary operator to set browser to chrome or browser
 var browser = (typeof browser === "undefined") ? chrome : browser;
 
-// initialize the storage
-// if (browser.storage.sync.get("initialized") === undefined) {
-if (true) {
-    browser.storage.sync.set({
-        highlight: true,
-        searchbars: true,
-        homepage: true,
-        initialized: true
-    });
+const storage_initialized = browser.storage.sync.get("initialized").then((result) => {
+    if (result.initialized === undefined) {
+        browser.storage.sync.set({
+            highlight: true,
+            searchbars: true,
+            homepage: true,
+            initialized: true
+        });
+    }
     if (DEBUG) console.log("Storage values initialized");
-}
-
+});
 if (DEBUG) console.log(browser.storage.sync.get());
 
 //select search bars and open them on the associated keyboar shortcut.
@@ -41,7 +40,7 @@ class WebsiteShortcuts {
         });
 
         // TODO fix Uncaught Error: Extension context invalidated.
-        try{
+        try {
             browser.storage.sync.get("highlight", (result) => {
                 if (result.highlight) {
                     this.filtered_input_fields.forEach((element) => {
@@ -62,11 +61,11 @@ class WebsiteShortcuts {
                         this.filtered_input_fields[i].style.outline = "none";
                     }
                 }
-    
+
             });
         }
-        catch(e){
-            console.log(e);
+        catch (e) {
+            if (DEBUG) console.log(e);
         }
 
     }
@@ -126,7 +125,7 @@ chrome.runtime.onMessage.addListener(
             console.log("message received : " + request.action);
             browser.storage.sync.get().then((result) => { console.log(result); });
         }
-        
+
         if (request.action === "searchbar_focus") {
             website_shortcuts.searchbarSelect();
         }
@@ -141,5 +140,7 @@ chrome.runtime.onMessage.addListener(
     }
 );
 
-console.log("payload.js ended");
-browser.storage.sync.get().then((result) => { console.log(result); });
+if (DEBUG) {
+    console.log("payload.js ended");
+    browser.storage.sync.get().then((result) => { console.log(result); });
+}
