@@ -2,7 +2,7 @@ const DEBUG = false;
 // ternary operator to set browser to chrome or browser
 var browser = (typeof browser === "undefined") ? chrome : browser;
 
-const storage_initialized = browser.storage.sync.get("initialized").then((result) => {
+browser.storage.sync.get("initialized").then((result) => {
     if (result.initialized === undefined) {
         browser.storage.sync.set({
             highlight: true,
@@ -119,7 +119,7 @@ class WebsiteShortcuts {
 var website_shortcuts = new WebsiteShortcuts();
 
 // listen for messages from background.js
-chrome.runtime.onMessage.addListener(
+browser.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
         if (DEBUG) {
             console.log("message received : " + request.action);
