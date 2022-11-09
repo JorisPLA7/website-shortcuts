@@ -5,6 +5,7 @@ var browser = (typeof browser === "undefined") ? chrome : browser;
 
 browser.storage.sync.get("initialized").then((result) => {
     if (result.initialized === undefined) {
+        // supposed to be only triggered once, at install
         browser.storage.sync.set({
             highlight: true,
             searchbars: true,
@@ -15,7 +16,6 @@ browser.storage.sync.get("initialized").then((result) => {
     if (DEBUG) console.log("Storage values initialized");
 }).then(() => {
     if (DEBUG) console.log(browser.storage.sync.get());
-
 
     // hide irrelevant browser related content
     if (typeof chrome === "undefined") {
@@ -39,10 +39,10 @@ browser.storage.sync.get("initialized").then((result) => {
                 console.log(toggleSwitch.id + " : " + result[toggleSwitch.id]);
             });
         });
+        console.log("test");
+        browser.storage.sync.get("initialized", (result) => { console.log(result); });
+        browser.storage.sync.get().then((result) => { console.log(result); });
     }
-    console.log("test");
-    browser.storage.sync.get("initialized", (result) => { console.log(result); });
-    browser.storage.sync.get().then((result) => { console.log(result); });
 
     // initialize the toggle switches "toggle-ON" class based on the settings
     toggleSwitches.forEach((toggleSwitch) => {

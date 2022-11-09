@@ -4,6 +4,7 @@ var browser = (typeof browser === "undefined") ? chrome : browser;
 
 browser.storage.sync.get("initialized").then((result) => {
     if (result.initialized === undefined) {
+        // supposed to be only triggered once, at install
         browser.storage.sync.set({
             highlight: true,
             searchbars: true,
@@ -47,14 +48,6 @@ class WebsiteShortcuts {
                         element.style.outline = "2px solid rgba(255, 0, 0, 0.25)";
                         element.style.outlineRadius = "5px";
                     });
-                    // }
-                    // for (let i = 0; i < this.filtered_input_fields.length; i++) {
-                    //     if (i == 0) {
-                    //         this.filtered_input_fields[i].style.border = "2px solid rgba(255, 0, 0, 0.25)";
-                    //         this.filtered_input_fields[i].style.borderRadius = "5px";
-                    //     }
-                    //     else this.text_fields[i].style.border = "1px solid green";
-                    // }
                 }
                 else {
                     for (let i = 0; i < this.filtered_input_fields.length; i++) {
@@ -67,7 +60,6 @@ class WebsiteShortcuts {
         catch (e) {
             if (DEBUG) console.log(e);
         }
-
     }
 
     searchbarSelect() {
@@ -79,7 +71,6 @@ class WebsiteShortcuts {
                 }
             }
         });
-
     }
 
     reachHomepage() {
@@ -90,8 +81,7 @@ class WebsiteShortcuts {
         });
     }
 
-
-    // Common listener for all keyboard shortcuts
+    // to be sure that the search bar is highlighted when the user hits Ctrl
     kbShortcutListener() {
         // save object reference
         var self = this;
