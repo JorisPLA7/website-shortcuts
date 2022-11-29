@@ -16,15 +16,21 @@ class Settings {
             }
             if (self._highlight === undefined) {
                 self._highlight = true;
-                console.log("Highlight feature setting not found in storage, setting to true");
+                if (DEBUG) {
+                  console.log("Highlight feature setting not found in storage, setting to true");
+                }
             }
             if (self._searchbars === undefined) {
                 self._searchbars = true;
-                console.log("Searchbars feature setting not found in storage, setting to true");
+                if (DEBUG) {
+                  console.log("Searchbars feature setting not found in storage, setting to true");
+                }
             }
             if (self._homepage === undefined) {
                 self._homepage = true;
-                console.log("Homepage feature setting not found in storage, setting to true");
+                if (DEBUG) {
+                  console.log("Homepage feature setting not found in storage, setting to true");
+                }
             }
             self.pushToStorage();
         }
