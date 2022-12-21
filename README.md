@@ -1,5 +1,10 @@
 # Website Shortcut
+
 Browser extension to add an unique keyboard shortcut to open some webpage elements, like the searchbar or the login page/form.
+
+## Store links 
+[Firefox](https://addons.mozilla.org/en-US/firefox/addon/website-shortcuts/)
+[Chome](https://chrome.google.com/webstore/detail/website-shortcuts/pgenobamflicdajiblcdjpfendgpcijg) very much outdated until Google validates the new update)
 
 Default shortcuts for PC : Windows, Linux
 - `Ctrl + Space` to open the searchbar
