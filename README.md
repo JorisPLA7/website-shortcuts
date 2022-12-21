@@ -7,6 +7,8 @@ Browser extension to add an unique keyboard shortcut to open some webpage elemen
 * [Firefox](https://addons.mozilla.org/en-US/firefox/addon/website-shortcuts/)
 * [Chome](https://chrome.google.com/webstore/detail/website-shortcuts/pgenobamflicdajiblcdjpfendgpcijg) very much outdated until Google validates the new update)
 
+## Shortcuts 
+
 Default shortcuts for PC : Windows, Linux
 - `Ctrl + Space` to open the searchbar
 - `Ctrl + Shift + Y` to open the homepage
@@ -19,7 +21,7 @@ Feel free to change them in your browser settings.
 
 ## New features
 
-- Nice UI
+- UI
 - Customizable shortcuts from the browser settings
 
 ## Kind of a roadmap : 
