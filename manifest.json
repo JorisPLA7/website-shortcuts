@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Website Shortcuts",
-  "version": "2.0.2",
+  "version": "2.0.3",
 
   "action": {
     "default_icon": "icons/logo.png",
@@ -39,7 +39,7 @@
   
   "author": "Joris Placette",
 
-  "description": "Reach that searchbar without leaving the keyboard.",
+  "description": "A new set of keyboard shortcut to open website elements, like some searchbars, and reach homepage.",
   "icons": {
     "32": "icons/logo.png",
     "64": "icons/logo-64-.png",
