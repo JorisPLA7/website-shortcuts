@@ -4,8 +4,10 @@ Browser extension to add an unique keyboard shortcut to open some webpage elemen
 
 ## Store links 
 
-* [Firefox](https://addons.mozilla.org/en-US/firefox/addon/website-shortcuts/)
-* [Chome](https://chrome.google.com/webstore/detail/website-shortcuts/pgenobamflicdajiblcdjpfendgpcijg) very much outdated until Google validates the new update)
+* [Firefox](https://addons.mozilla.org/en-US/firefox/addon/website-shortcuts/) (outdated 0:))
+* [Chome](https://chrome.google.com/webstore/detail/website-shortcuts/pgenobamflicdajiblcdjpfendgpcijg) (very much outdated until Google validates the new update)
+
+Until I push the new updates, I strongly recomment to install the extension by downloading it from github. Sorry for the unconvenience.
 
 ## Shortcuts 
 
