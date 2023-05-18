@@ -33,6 +33,7 @@ class WebsiteShortcuts {
         this.focused_id = 0;
         this.search_fields = document.querySelectorAll('input[type=search]');
         this.text_fields = document.querySelectorAll("input[type=text]");
+        this.text_fields = document.querySelectorAll("input:not([type])");
         this.all_input_fields = [...this.search_fields, ...this.text_fields];
 
         this.filtered_input_fields = this.all_input_fields.filter((element) => {
