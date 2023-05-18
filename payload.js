@@ -33,7 +33,8 @@ class WebsiteShortcuts {
         this.focused_id = 0;
         this.search_fields = document.querySelectorAll('input[type=search]');
         this.text_fields = document.querySelectorAll("input[type=text]");
-        this.all_input_fields = [...this.search_fields, ...this.text_fields];
+        this.no_explicit_type_fields = document.querySelectorAll("input:not([type])");
+        this.all_input_fields = [...this.search_fields, ...this.text_fields, ...this.no_explicit_type_fields];
 
         this.filtered_input_fields = this.all_input_fields.filter((element) => {
             // filter out hidden elements  && element.style.display !== "none"; // filter out invisible elements
@@ -132,5 +133,5 @@ browser.runtime.onMessage.addListener(
 
 if (DEBUG) {
     console.log("payload.js ended");
-    browser.storage.sync.get().then((result) => { console.log(result); });
+    // browser.storage.sync.get().then((result) => { console.log(result); });
 }
