@@ -1,6 +1,6 @@
 # Website Shortcut
 
-Browser extension to add an unique keyboard shortcut to open some webpage elements, like the searchbar or the login page/form.
+Use your keyboard to reach page elements, like the searchbar or the login page/form.
 
 ## Store links 
 
